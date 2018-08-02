@@ -25,7 +25,7 @@ OBJECTS=$(OS) $(BIOS) $(LIBC)
 default: bin/bios.rom bin/libc.o bin/src/template.o
 
 bin/bios.rom:bin/os.o bin/bios.o bin/BIOSMerge
-	bin/BIOSMerge $@ bin/os.o bin/bios.o
+	bin/BIOSMerge $@ $^
 
 bin/BIOSMerge:src/BIOSMerge.cpp
 	mkdir $(dir $@) -p
