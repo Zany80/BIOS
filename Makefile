@@ -22,12 +22,19 @@ LIBC=$(addprefix bin/, $(addsuffix .o, $(basename $(LIBC_SOURCES))))
 BIOS=$(addprefix bin/, $(addsuffix .o, $(basename $(BIOS_SOURCES))))
 OBJECTS=$(OS) $(BIOS) $(LIBC)
 
-default:bin/os.rom bin/bios.rom bin/libc.o bin/src/template.o
+default: bin/bios.rom bin/libc.o bin/src/template.o
 
-bin/os.rom: $(OS)
+bin/bios.rom:bin/os.o bin/bios.o bin/BIOSMerge
+	bin/BIOSMerge $@ bin/os.o bin/bios.o
+
+bin/BIOSMerge:src/BIOSMerge.cpp
+	mkdir $(dir $@) -p
+	$(CXX) $< -o $@
+
+bin/os.o: $(OS)
 	$(LD) $(LDFLAGS) -forigin=0x0000 $^ -o $@
 
-bin/bios.rom: $(BIOS)
+bin/bios.o: $(BIOS)
 	$(LD) $(LDFLAGS) -forigin=0x8000 $^ -o $@
 
 bin/libc.o: $(LIBC)
