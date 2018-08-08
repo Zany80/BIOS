@@ -41,6 +41,7 @@ bin/libc.o: $(LIBC)
 	$(LD) $(LDFLAGS) -c -forigin=0x0000 $^ -o $@
 
 install: bin/bios.rom bin/libc.o bin/src/template.o
+	mkdir -p $(DESTDIR)
 	cp $^ $(DESTDIR)/
 
 clean:
