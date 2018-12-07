@@ -1,11 +1,11 @@
 .equ mmu_port, 0
-.equ idt, 0x0300
+.equ idt, 0xFF00
 
 start:
-	jp _main
+	jp main
 
 .block 0x100 - $
-_main:
+main:
 	ld hl, mapping
 	call serial_write
 	; Map in pages 1, 2, and 3
@@ -51,10 +51,7 @@ _main:
 	call serial_write
 	im 2
 	ei
-	
-end:
-	halt
-	jr end
+	jp _main
 
 unhandled_interrupt:
 	di

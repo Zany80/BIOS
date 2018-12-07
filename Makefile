@@ -5,18 +5,18 @@ LDFLAGS=-fno-remove-unused-funcs
 ASFLAGS=-fexplicit-export -fexplicit-import -Iinclude -fno-remove-unused-funcs
 CFLAGS=-Iinclude --no-std-crt0 --std-c11 -mz80 #--nostdinc --nostdlib 
 
-bin/src/%.o:src/%.asm
+bin/src/%.asm.o:src/%.asm
 	mkdir $(dir $@) -p
 	$(AS) $(ASFLAGS) -c $< -o $@
 
-bin/src/%.o:src/%.c $(wildcard include/*)
+bin/src/%.c.o:src/%.c $(wildcard include/*)
 	mkdir $(dir $@) -p
 	$(CC) -S $< -o $(basename $@).asm $(CFLAGS)
 	$(AS) $(ASFLAGS) -c $(basename $@).asm -o $@
 #	rm $(basename $@).asm
 
 SRC=src/main.asm $(wildcard src/*)
-OBJECTS=$(addprefix bin/, $(addsuffix .o, $(basename $(SRC))))
+OBJECTS=$(addprefix bin/, $(addsuffix .o, $(SRC)))
 
 .PHONY:default install
 

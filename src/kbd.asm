@@ -1,20 +1,19 @@
+; handleEvent is a C function with this sig:
+; void handleEvent(int type, int data)
+
 .global keyboard_handler
 keyboard_handler:
 	di
 	exx
-	ld hl, value_read
-	call serial_write
+	ld h, 0
 	call serial_read
-	call putchar
-	ld a, 0x0A
-	call putchar
+	ld l, a
+	push hl
+	ld l, 0
+	push hl
+	call _handleEvent
+	pop hl \ pop hl
 	exx
 	ei
 	reti
-
-.global getchar
-getchar:
 	
-	ret
-
-value_read: .asciiz "Keyboard sent: "
